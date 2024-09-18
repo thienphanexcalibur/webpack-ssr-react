@@ -1,0 +1,36 @@
+{
+  "name": "webpack-ssr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --config webpack.server.dev.js && node ./dist/server/server.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "express": "^4.21.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "swc-loader": "^0.2.6",
+    "webpack": "^5.94.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.7.26",
+    "@types/react": "^18.3.6",
+    "@types/react-dom": "^18.3.0",
+    "@types/webpack-node-externals": "^3",
+    "esbuild-loader": "^4.2.2",
+    "html-webpack-plugin": "^5.6.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-middleware": "^7.4.2",
+    "webpack-dev-server": "^5.1.0",
+    "webpack-merge": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
+}
