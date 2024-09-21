@@ -9,6 +9,21 @@ const config = {
     },
     extensions: [".js", ".jsx", ".ts", ".tsx", ".wasm", ".json", ".node"],
   },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx|js)$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "esbuild-loader",
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: ["css-loader"],
+      },
+    ],
+  },
 };
 
 module.exports = config;

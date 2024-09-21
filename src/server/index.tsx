@@ -1,8 +1,8 @@
 import App from "@/client/entry";
 import webpack from "webpack";
-import express from "express";
+import express, { Response } from "express";
 import { renderToString } from "react-dom/server";
-import middleware from "webpack-dev-middleware";
+import middleware, { ExtendedServerResponse } from "webpack-dev-middleware";
 
 const config = require("../../webpack.client.dev.js");
 
@@ -12,7 +12,12 @@ const compiler = webpack(config);
 
 app.use(middleware(compiler, { serverSideRender: true }));
 
-function normalizeAssets(assets) {
+// compiler.compile((err, res) => {
+//   res?.getStats();
+//   res?.compiler.outputFileSystem
+// });
+
+function normalizeAssets(assets: any) {
   if (Object.prototype.toString(assets) === "[object Object]") {
     return Object.values(assets);
   }
@@ -20,25 +25,35 @@ function normalizeAssets(assets) {
   return Array.isArray(assets) ? assets : [assets];
 }
 
-app.use((req, res) => {
-  const { devMiddleware } = res.locals.webpack;
-  const outputFileSystem = devMiddleware.outputFileSystem;
-  const jsonWebpackStats = devMiddleware.stats.toJson();
+app.use((req, res: Response & ExtendedServerResponse) => {
+  const { devMiddleware } = res.locals?.webpack!;
+  const outputFileSystem = devMiddleware!.outputFileSystem;
+  const jsonWebpackStats = devMiddleware!.stats!.toJson();
   const { assetsByChunkName, outputPath } = jsonWebpackStats;
-  res.send(`
-<html>
-  <head>
+
+  const html = `
+    <html>
+    <head>
     <title>My App</title>
+    ${normalizeAssets(assetsByChunkName?.entry)
+      .filter((path) => path.endsWith(".css"))
+      .map(
+        (item) =>
+          `<style type="text/css">${outputFileSystem
+            .readFileSync(`${outputPath}/${item}`)
+            .toString()}</style>`
+      )}
   </head>
   <body>
 <div id="app">${renderToString(<App />)}</div>
-    ${normalizeAssets(assetsByChunkName.client)
+    ${normalizeAssets(assetsByChunkName?.entry)
       .filter((path) => path.endsWith(".js"))
       .map((path) => `<script src="${path}"></script>`)
       .join("\n")}
   </body>
 </html>
-  `);
+  `;
+  res.send(html);
 });
 
 const PORT = 3000;

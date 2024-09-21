@@ -4,8 +4,9 @@ const common = require("./webpack");
 const nodeExternals = require("webpack-node-externals");
 
 const resolve = (_path) => path.resolve(__dirname, _path);
+
 /**@type {import('webpack').WebpackOptionsNormalized} */
-const serverConfig = merge(common, {
+const serverConfig = {
   mode: "development",
   entry: {
     server: {
@@ -19,16 +20,11 @@ const serverConfig = merge(common, {
   externals: [nodeExternals()],
   output: {
     path: resolve("./dist/server"),
+    // chunkFilename: "[name].chunk.js",
+    clean: true,
+    publicPath: "/",
+    globalObject: "this",
   },
-  module: {
-    rules: [
-      {
-        test: /\.(js|ts|tsx)$/,
-        loader: "esbuild-loader",
-        options: {},
-      },
-    ],
-  },
-});
+};
 
-module.exports = serverConfig;
+module.exports = merge(common, serverConfig);
