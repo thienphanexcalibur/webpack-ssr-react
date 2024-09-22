@@ -3,10 +3,11 @@
   "_version": "2.0.0",
 
   "compilerOptions": {
+    "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-		"checkJs": true,
+    "checkJs": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -17,9 +18,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./src", "./src/*"]
+      "root/*": ["./", "./*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "global.d.ts"],
   "exclude": ["node_modules"]
 }

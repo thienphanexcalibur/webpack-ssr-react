@@ -5,40 +5,42 @@ const common = require("./webpack");
 
 const resolve = (_path) => path.resolve(__dirname, _path);
 
-/**@type {import('webpack').WebpackOptionsNormalized} */
+/**@type {import('webpack').Configuration} */
 const clientConfig = {
-  mode: "development",
+  name: "client",
   entry: {
     entry: {
-      import: resolve("./src/client/index.tsx"),
+      import: resolve("../client/index.tsx"),
       filename: "js/entry.[contenthash:4].js",
     },
   },
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "client/css/entry.[contenthash:4].css",
+      filename: "css/entry.[contenthash:4].css",
+      chunkFilename: "css/[chunkhash:4].chunk.css",
     }),
   ],
 
   output: {
-    path: resolve("./dist/client"),
+    path: resolve("../dist/client"),
     clean: true,
     chunkFilename: "js/[chunkhash:4].chunk.js",
+    publicPath: "/",
   },
 
   module: {
     rules: [
       {
+        test: /\.(ts|tsx|js)$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "esbuild-loader",
+        },
+      },
+      {
         test: /\.css$/i,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: "/dist/client/css",
-            },
-          },
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
